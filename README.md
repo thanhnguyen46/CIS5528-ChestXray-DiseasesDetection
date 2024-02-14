@@ -30,3 +30,20 @@ Frontend: HTML, CSS, and JavaScript for designing the user interface and handlin
 ## Background
 There has been existing work to determine whether a person has Pneumonia, Covid-19, or Tuberculosis through Chest X-Ray. As accuracy in the medical field is extremely important, we want to improve the existing methods by exploring more models and handling models on various splits of datasets to calculate the accuracy when overfitting occurs to explore the learning pattern from other classes.
 Furthermore, we want to explore whether we can determine various types of Pneumonia as well as add another dataset to train further after the first batch is completed to see whether it has significant improvement.
+
+## Collaborators
+
+[//]: # ( readme: collaborators -start )
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/thanhnguyen46">
+            <img src="https://avatars.githubusercontent.com/u/60533187?v=4" width="100;" alt="Thanh Nguyen"/>
+            <br />
+            <sub><b>Thanh Nguyen</b></sub>
+        </a>
+    </td>
+</tr>
+</table>
+
+[//]: # ( readme: collaborators -end )
