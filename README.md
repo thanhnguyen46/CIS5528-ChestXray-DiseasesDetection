@@ -45,7 +45,7 @@ Furthermore, we want to explore whether we can determine various types of Pneumo
     </td>
     <td align="center">
         <a href="https://github.com/manan305">
-            <img src="https://avatars.githubusercontent.com/u/159965792?v=4" width="100;" alt="Thanh Nguyen"/>
+            <img src="https://avatars.githubusercontent.com/u/159965792?v=4" width="100;" alt="Manan"/>
             <br />
             <sub><b>Thanh Nguyen</b></sub>
         </a>
