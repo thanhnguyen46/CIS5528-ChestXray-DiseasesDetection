@@ -113,3 +113,29 @@ valid_gen = val_gen.flow_from_dataframe( valid_df, x_col= 'filepaths', y_col= 'l
 
 test_gen = ts_gen.flow_from_dataframe( test_df, x_col= 'filepaths', y_col= 'labels', target_size= img_size, class_mode= 'categorical',
                                     color_mode= 'rgb', shuffle= False, batch_size= batch_size)
+
+# SAMPLES THE DATA
+
+# defines dictionary {'class': index}
+g_dict = train_gen.class_indices
+# defines list of dictionary's kays (classes), classes names : string   
+classes = list(g_dict.keys())
+# get a batch size samples from the generator
+images, labels = next(train_gen)
+# difference between next iterator and for iterator
+
+plt.figure(figsize= (20, 20))
+
+for i in range(16):
+    plt.subplot(4, 4, i + 1)
+    # scales data to range (0 - 255) and plots it
+    image = images[i] / 255
+    plt.imshow(image)
+    # get image index
+    index = np.argmax(labels[i])
+    # get class of image
+    class_name = classes[index]
+    plt.title(class_name, color= 'blue', fontsize= 12)
+    plt.axis('off')
+plt.tight_layout()
+plt.show()
