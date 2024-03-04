@@ -25,3 +25,22 @@ import warnings
 warnings.filterwarnings("ignore")
 
 print ('modules loaded')
+
+# PREPROCESSING
+
+# crop image size
+batch_size = 16
+img_size = (224, 224)
+
+tr_gen = ImageDataGenerator()
+ts_gen = ImageDataGenerator()
+val_gen= ImageDataGenerator()
+
+train_gen = tr_gen.flow_from_dataframe( train_df, x_col= 'filepaths', y_col= 'labels', target_size= img_size, class_mode= 'categorical',
+                                    color_mode= 'rgb', shuffle= True, batch_size= batch_size)
+
+valid_gen = val_gen.flow_from_dataframe( valid_df, x_col= 'filepaths', y_col= 'labels', target_size= img_size, class_mode= 'categorical',
+                                    color_mode= 'rgb', shuffle= True, batch_size= batch_size)
+
+test_gen = ts_gen.flow_from_dataframe( test_df, x_col= 'filepaths', y_col= 'labels', target_size= img_size, class_mode= 'categorical',
+                                    color_mode= 'rgb', shuffle= False, batch_size= batch_size)
