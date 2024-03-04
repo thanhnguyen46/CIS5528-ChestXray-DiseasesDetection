@@ -30,7 +30,7 @@ print ('modules loaded')
 
 # TRAINING DATA
 # Generate data paths with labels
-train_data_dir = '/chest_xray/train'
+train_data_dir = './chest_xray/train'
 filepaths = []
 labels = []
 
@@ -55,7 +55,7 @@ train_df
 
 # TESTING DATA
 # Generate data paths with labels
-test_data_dir = '/chest_xray/test'
+test_data_dir = './chest_xray/test'
 filepaths = []
 labels = []
 
@@ -76,7 +76,7 @@ test_df = pd.concat([Fseries, Lseries], axis= 1)
 
 # VALIDATION DATA
 # Generate data paths with labels
-val_data_dir = '/chest_xray/val'
+val_data_dir = './chest_xray/val'
 filepaths = []
 labels = []
 
