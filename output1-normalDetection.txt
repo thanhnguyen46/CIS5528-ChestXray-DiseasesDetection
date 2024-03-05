@@ -1,0 +1,88 @@
+Found 5216 validated image filenames belonging to 2 classes.
+Found 16 validated image filenames belonging to 2 classes.
+Found 624 validated image filenames belonging to 2 classes.
+
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 224, 224, 64)      1792      
+                                                                 
+ conv2d_1 (Conv2D)           (None, 224, 224, 64)      36928     
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 112, 112, 64)      0         
+ D)                                                              
+                                                                 
+ conv2d_2 (Conv2D)           (None, 112, 112, 128)     73856     
+                                                                 
+ conv2d_3 (Conv2D)           (None, 112, 112, 128)     147584    
+                                                                 
+ max_pooling2d_1 (MaxPoolin  (None, 56, 56, 128)       0         
+ g2D)                                                            
+                                                                 
+ conv2d_4 (Conv2D)           (None, 56, 56, 256)       295168    
+                                                                 
+ conv2d_5 (Conv2D)           (None, 56, 56, 256)       590080    
+                                                                 
+ conv2d_6 (Conv2D)           (None, 56, 56, 256)       590080    
+                                                                 
+ max_pooling2d_2 (MaxPoolin  (None, 28, 28, 256)       0         
+ g2D)                                                            
+                                                                 
+ conv2d_7 (Conv2D)           (None, 28, 28, 512)       1180160   
+                                                                 
+ conv2d_8 (Conv2D)           (None, 28, 28, 512)       2359808   
+                                                                 
+ conv2d_9 (Conv2D)           (None, 28, 28, 512)       2359808   
+                                                                 
+ max_pooling2d_3 (MaxPoolin  (None, 14, 14, 512)       0         
+ g2D)                                                            
+                                                                 
+ conv2d_10 (Conv2D)          (None, 14, 14, 512)       2359808   
+                                                                 
+ conv2d_11 (Conv2D)          (None, 14, 14, 512)       2359808   
+                                                                 
+ conv2d_12 (Conv2D)          (None, 14, 14, 512)       2359808   
+                                                                 
+ max_pooling2d_4 (MaxPoolin  (None, 7, 7, 512)         0         
+ g2D)                                                            
+                                                                 
+ flatten (Flatten)           (None, 25088)             0         
+                                                                 
+ dense (Dense)               (None, 256)               6422784   
+                                                                 
+ dense_1 (Dense)             (None, 64)                16448     
+                                                                 
+ dense_2 (Dense)             (None, 2)                 130       
+                                                                 
+=================================================================
+Total params: 21154050 (80.70 MB)
+Trainable params: 21154050 (80.70 MB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+Epoch 1/13
+326/326 [==============================] - 1067s 3s/step - loss: 4.5779 - accuracy: 0.8135 - val_loss: 0.8432 - val_accuracy: 0.8125
+Epoch 2/13
+326/326 [==============================] - 1057s 3s/step - loss: 0.2072 - accuracy: 0.9105 - val_loss: 0.9744 - val_accuracy: 0.6875
+Epoch 3/13
+326/326 [==============================] - 1061s 3s/step - loss: 0.1080 - accuracy: 0.9624 - val_loss: 0.5059 - val_accuracy: 0.8750
+Epoch 4/13
+326/326 [==============================] - 1066s 3s/step - loss: 0.0752 - accuracy: 0.9726 - val_loss: 0.7158 - val_accuracy: 0.8750
+Epoch 5/13
+326/326 [==============================] - 1058s 3s/step - loss: 0.0677 - accuracy: 0.9753 - val_loss: 2.2045 - val_accuracy: 0.7500
+Epoch 6/13
+326/326 [==============================] - 1058s 3s/step - loss: 0.0576 - accuracy: 0.9801 - val_loss: 0.4746 - val_accuracy: 0.9375
+Epoch 7/13
+326/326 [==============================] - 1061s 3s/step - loss: 0.0405 - accuracy: 0.9847 - val_loss: 1.0252 - val_accuracy: 0.8125
+Epoch 8/13
+326/326 [==============================] - 1059s 3s/step - loss: 0.0316 - accuracy: 0.9898 - val_loss: 0.3868 - val_accuracy: 0.9375
+Epoch 9/13
+326/326 [==============================] - 1060s 3s/step - loss: 0.0333 - accuracy: 0.9883 - val_loss: 0.6934 - val_accuracy: 0.9375
+Epoch 10/13
+326/326 [==============================] - 1058s 3s/step - loss: 0.0241 - accuracy: 0.9914 - val_loss: 0.8781 - val_accuracy: 0.8750
+Epoch 11/13
+326/326 [==============================] - 1063s 3s/step - loss: 0.0282 - accuracy: 0.9893 - val_loss: 0.5202 - val_accuracy: 0.8750
+Epoch 12/13
+326/326 [==============================] - 1058s 3s/step - loss: 0.0249 - accuracy: 0.9933 - val_loss: 0.4351 - val_accuracy: 0.8750
+Epoch 13/13
+326/326 [==============================] - 1053s 3s/step - loss: 0.0146 - accuracy: 0.9948 - val_loss: 0.8333 - val_accuracy: 0.8750

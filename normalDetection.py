@@ -116,13 +116,13 @@ test_gen = ts_gen.flow_from_dataframe( test_df, x_col= 'filepaths', y_col= 'labe
 
 # SAMPLES THE DATA
 
-# defines dictionary {'class': index}
+# Defines dictionary {'class': index}
 g_dict = train_gen.class_indices
-# defines list of dictionary's kays (classes), classes names : string   
+# Defines list of dictionary's kays (classes), classes names : string   
 classes = list(g_dict.keys())
-# get a batch size samples from the generator
+# Getting a batch size samples from the generator
 images, labels = next(train_gen)
-# difference between next iterator and for iterator
+# Difference between next iterator and for iterator
 
 plt.figure(figsize= (20, 20))
 
@@ -146,7 +146,8 @@ img_size = (224, 224)
 channels = 3
 img_shape = (img_size[0], img_size[1], channels)
 
-class_count = len(list(train_gen.class_indices.keys())) # to define number of classes in dense layer
+# Defining number of classes in dense layer
+class_count = len(list(train_gen.class_indices.keys()))
 
 model = Sequential([
     Conv2D(filters=64, kernel_size=(3,3), padding="same", activation="relu", input_shape= img_shape),
@@ -225,3 +226,53 @@ plt.legend()
 
 plt.tight_layout
 plt.show()
+
+# EVALUATING THE MODEL
+
+train_score = model.evaluate(train_gen, verbose= 1)
+valid_score = model.evaluate(valid_gen, verbose= 1)
+test_score = model.evaluate(test_gen, verbose= 1)
+
+print("Train Loss: ", train_score[0])
+print("Train Accuracy: ", train_score[1])
+print('-' * 20)
+print("Validation Loss: ", valid_score[0])
+print("Validation Accuracy: ", valid_score[1])
+print('-' * 20)
+print("Test Loss: ", test_score[0])
+print("Test Accuracy: ", test_score[1])
+
+preds = model.predict_generator(test_gen)
+y_pred = np.argmax(preds, axis=1)
+
+g_dict = test_gen.class_indices
+classes = list(g_dict.keys())
+
+# Confusion matrix
+cm = confusion_matrix(test_gen.classes, y_pred)
+cm
+
+plt.figure(figsize= (10, 10))
+plt.imshow(cm, interpolation= 'nearest', cmap= plt.cm.Blues)
+plt.title('Confusion Matrix')
+plt.colorbar()
+
+tick_marks = np.arange(len(classes))
+plt.xticks(tick_marks, classes, rotation= 45)
+plt.yticks(tick_marks, classes)
+
+thresh = cm.max() / 2.
+for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+    plt.text(j, i, cm[i, j], horizontalalignment= 'center', color= 'white' if cm[i, j] > thresh else 'black')
+
+plt.tight_layout()
+plt.ylabel('True Label')
+plt.xlabel('Predicted Label')
+plt.show()
+
+print(classification_report(test_gen.classes, y_pred, target_names= classes))
+
+model.save('Pneumonia.h5')
+
+loaded_model = tf.keras.models.load_model('/kaggle/working/Pneumonia.h5', compile=False)
+loaded_model.compile(Adamax(learning_rate= 0.001), loss= 'categorical_crossentropy', metrics= ['accuracy'])
