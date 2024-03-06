@@ -86,3 +86,23 @@ Epoch 12/13
 326/326 [==============================] - 1058s 3s/step - loss: 0.0249 - accuracy: 0.9933 - val_loss: 0.4351 - val_accuracy: 0.8750
 Epoch 13/13
 326/326 [==============================] - 1053s 3s/step - loss: 0.0146 - accuracy: 0.9948 - val_loss: 0.8333 - val_accuracy: 0.8750
+
+326/326 [==============================] - 310s 951ms/step - loss: 0.0061 - accuracy: 0.9994
+1/1 [==============================] - 1s 1s/step - loss: 0.8333 - accuracy: 0.8750
+39/39 [==============================] - 36s 925ms/step - loss: 1.8377 - accuracy: 0.7356
+Train Loss:  0.006138850003480911
+Train Accuracy:  0.9994248747825623
+--------------------
+Validation Loss:  0.8332856297492981
+Validation Accuracy:  0.875
+--------------------
+Test Loss:  1.8377124071121216
+Test Accuracy:  0.7355769276618958
+              precision    recall  f1-score   support
+
+      NORMAL       0.95      0.31      0.47       234
+   PNEUMONIA       0.71      0.99      0.82       390
+
+    accuracy                           0.74       624
+   macro avg       0.83      0.65      0.65       624
+weighted avg       0.80      0.74      0.69       624
