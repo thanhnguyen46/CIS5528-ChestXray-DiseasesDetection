@@ -16,10 +16,13 @@ from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import Adam, Adamax
+# from tensorflow.keras.optimizers import Adam, Adamax
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.legacy import Adamax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Activation, Dropout, BatchNormalization
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, GlobalAveragePooling2D, Dense, Activation, Dropout, BatchNormalization
 from tensorflow.keras import regularizers
+from tensorflow.keras.applications import ResNet50
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -184,6 +187,7 @@ model.compile(Adamax(learning_rate= 0.001), loss= 'categorical_crossentropy', me
 
 model.summary()
 
+
 # TRAINING THE DATA
 
 epochs = 13   # number of all epochs in training
@@ -272,7 +276,5 @@ plt.show()
 
 print(classification_report(test_gen.classes, y_pred, target_names= classes))
 
-model.save('Pneumonia.h5')
-
-loaded_model = tf.keras.models.load_model('/kaggle/working/Pneumonia.h5', compile=False)
-loaded_model.compile(Adamax(learning_rate= 0.001), loss= 'categorical_crossentropy', metrics= ['accuracy'])
+# Loading pre-trained model
+model.save('Pneumonia_NormalDetection.h5')
