@@ -48,6 +48,9 @@ def predict():
     # Make prediction
     prediction = model.predict(img_array)
 
+    # Print the predicted probabilities for each class DEBUG
+    print("Predicted probabilities:", prediction)
+
     # Get the predicted class index
     predicted_class_index = np.argmax(prediction[0])
 
