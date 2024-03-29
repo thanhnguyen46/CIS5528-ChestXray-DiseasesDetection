@@ -2,60 +2,61 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [prediction, setPrediction] = useState(null);
-  const [imageData, setImageData] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [predictions, setPredictions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImageData(reader.result); // Add this line
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    setSelectedFiles(Array.from(e.target.files));
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      alert('Please select an image to upload.');
+    if (selectedFiles.length === 0) {
+      alert('Please select at least one image to upload.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
+    setLoading(true);
+    const newPredictions = [];
 
-    try {
-      const response = await fetch('http://localhost:5000/predict', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      console.log('Response data:', data); // DEBUG ON CONSOLE
-      setPrediction(data);
-    } catch (error) {
-      console.error('Error fetching prediction:', error);
+    for (const file of selectedFiles) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('http://localhost:5528/predict', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        newPredictions.push(data);
+      } catch (error) {
+        console.error('Error fetching prediction:', error);
+      }
     }
+
+    setPredictions(newPredictions);
+    setLoading(false);
   };
 
   return (
     <div className="App">
       <h1>Chest X-ray Image Classifier</h1>
-      <input type="file" onChange={handleFileChange} />
+      <input type="file" multiple onChange={handleFileChange} />
       <button onClick={handleUpload}>Upload</button>
-      {prediction && prediction.class && prediction.accuracy && (
-        <div>
-          <h2>Prediction Result:</h2>
+      {loading && <div className="loading">Processing...</div>}
+      {predictions.map((prediction, index) => (
+        <div key={index}>
+          <h2>Prediction Result {index + 1}:</h2>
           <p>Class: {prediction.class}</p>
-          <p>Accuracy: {(prediction.accuracy).toFixed(2)}%</p>
-          {imageData && ( // Add this condition
-            <img
-              src={imageData}
-              alt="Uploaded"
-              style={{ maxWidth: '300px', maxHeight: '300px' }}
-            />
-          )}
+          <p>Accuracy: {prediction.accuracy.toFixed(2)}%</p>
+          <img
+            src={`data:image/jpeg;base64,${prediction.imageData}`}
+            alt={`Uploaded ${index + 1}`}
+            style={{ maxWidth: '300px', maxHeight: '300px' }}
+          />
         </div>
-      )}
+      ))}
     </div>
   );
 }

@@ -19,3 +19,23 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+.loading {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
