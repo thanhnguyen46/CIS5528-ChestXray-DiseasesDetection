@@ -16,9 +16,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
-# from tensorflow.keras.optimizers import Adam, Adamax
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.optimizers.legacy import Adamax
+from tensorflow.keras.optimizers import Adam, Adamax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, GlobalAveragePooling2D, Dense, Activation, Dropout, BatchNormalization
 from tensorflow.keras import regularizers
@@ -226,7 +224,8 @@ print('-' * 20)
 print("Test Loss: ", test_score[0])
 print("Test Accuracy: ", test_score[1])
 
-preds = model.predict_generator(test_gen)
+test_gen.reset()
+preds = model.predict(test_gen, steps=len(test_gen), verbose=1)
 y_pred = np.argmax(preds, axis=1)
 
 g_dict = test_gen.class_indices
@@ -256,5 +255,12 @@ plt.show()
 
 print(classification_report(test_gen.classes, y_pred, target_names= classes))
 
-# Loading pre-trained model
-model.save('Pneumonia_ResNet50.h5')
+# Save the model architecture to JSON file
+model_json = model.to_json()
+with open('Pneumonia_ResNet50.json', 'w') as json_file:
+    json_file.write(model_json)
+    print('Model saved to disk')
+
+# Save the model weights
+model.save_weights('Pneumonia_ResNet50.weights.h5')
+print('Weights saved to disk')
