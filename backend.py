@@ -25,7 +25,7 @@ output_tensor = Dense(2, activation='softmax')(x)
 model = Model(inputs=input_tensor, outputs=output_tensor)
 
 # Load the trained weights
-model.load_weights('Pneumonia_VGG16.weights.h5')
+model.load_weights('Pneumonia_ResNet50.weights.h5')
 
 @app.route('/predict', methods=['POST'])
 def predict():
