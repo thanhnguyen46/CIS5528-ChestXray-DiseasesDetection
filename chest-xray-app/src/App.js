@@ -49,7 +49,7 @@ function App() {
         <div key={index}>
           <h2>Prediction Result {index + 1}:</h2>
           <p>Class: {prediction.class}</p>
-          <p>Accuracy: {prediction.accuracy.toFixed(2)}%</p>
+          <p>Confidence Score: {prediction.accuracy.toFixed(2)}%</p>
           <img
             src={`data:image/jpeg;base64,${prediction.imageData}`}
             alt={`Uploaded ${index + 1}`}
