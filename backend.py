@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 from keras.models import Model
-from keras.layers import Dense, GlobalAveragePooling2D, Input
-from keras.applications.resnet import ResNet50
+from keras.layers import Dense, Flatten, Dropout, Input
+from keras.applications.vgg16 import VGG16
+from keras.layers import BatchNormalization
 from PIL import Image
 import base64
 from io import BytesIO
@@ -11,21 +12,27 @@ from io import BytesIO
 app = Flask(__name__)
 CORS(app)
 
-# Load the pre-trained ResNet50 model without the top classification layer
-base_model = ResNet50(weights=None, include_top=False, input_shape=(224, 224, 3))
+# Load the pre-trained VGG16 model without the top classification layer
+base_model = VGG16(weights='vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(224, 224, 3))
 
-# Define the model architecture using functional API
-input_tensor = Input(shape=(224, 224, 3))
-x = base_model(input_tensor)
-x = GlobalAveragePooling2D()(x)
+# Freeze base model layers
+base_model.trainable = False
+
+# Define the model architecture
+x = Flatten()(base_model.output)
+x = Dense(512, activation='relu')(x)
+x = BatchNormalization()(x)
+x = Dropout(0.5)(x)
 x = Dense(256, activation='relu')(x)
-x = Dense(64, activation='relu')(x)
-output_tensor = Dense(2, activation='softmax')(x)
+x = BatchNormalization()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(2, activation='softmax')(x)
 
-model = Model(inputs=input_tensor, outputs=output_tensor)
+model = Model(inputs=base_model.input, outputs=predictions)
 
 # Load the trained weights
-model.load_weights('Pneumonia_ResNet50.weights.h5')
+model.load_weights('output_results/save_weights/Pneumonia_VGG16.weights.h5')
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
