@@ -168,7 +168,7 @@ model.summary()
 
 # TRAINING THE DATA
 
-epochs = 13   # number of all epochs in training
+epochs = 12   # number of all epochs in training
 history = model.fit(train_gen, epochs= epochs, verbose= 1, validation_data= valid_gen, shuffle= False)
 
 tr_acc = history.history['accuracy']
@@ -183,6 +183,9 @@ acc_highest = val_acc[index_acc]
 Epochs = [i+1 for i in range(len(tr_acc))]
 loss_label = f'best epoch= {str(index_loss + 1)}'
 acc_label = f'best epoch= {str(index_acc + 1)}'
+
+# Create a range of epochs for plotting
+epochs_range = range(1, len(tr_loss) + 1)
 
 # Plot training history
 plt.figure(figsize= (20, 8))
@@ -235,25 +238,90 @@ classes = list(g_dict.keys())
 cm = confusion_matrix(test_gen.classes, y_pred)
 cm
 
-plt.figure(figsize= (10, 10))
-plt.imshow(cm, interpolation= 'nearest', cmap= plt.cm.Blues)
+plt.figure(figsize=(10, 10))
+plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
 plt.title('Confusion Matrix')
 plt.colorbar()
 
 tick_marks = np.arange(len(classes))
-plt.xticks(tick_marks, classes, rotation= 45)
+plt.xticks(tick_marks, classes, rotation=45)
 plt.yticks(tick_marks, classes)
 
 thresh = cm.max() / 2.
 for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-    plt.text(j, i, cm[i, j], horizontalalignment= 'center', color= 'white' if cm[i, j] > thresh else 'black')
+    plt.text(j, i, cm[i, j], horizontalalignment='center', color='white' if cm[i, j] > thresh else 'black')
 
 plt.tight_layout()
 plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
+
+# Save the confusion matrix plot as an image file
+plt.savefig('resnet50_confusion_matrix.png')
+
+# Write the confusion matrix data to a text file
+np.savetxt('resnet50_confusion_matrix.txt', cm, delimiter=',')
+
 plt.show()
 
-print(classification_report(test_gen.classes, y_pred, target_names= classes))
+print(classification_report(test_gen.classes, y_pred, target_names=classes))
+
+# ROC curve
+from sklearn.metrics import roc_curve, auc
+
+# Assuming binary classification (two classes)
+y_true = test_gen.classes
+y_score = preds[:, 1]  # Probability of the positive class
+
+fpr, tpr, _ = roc_curve(y_true, y_score)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (AUC = %0.2f)' % roc_auc)
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+
+# Save the ROC curve plot as an image file
+plt.savefig('resnet50_roc_curve.png')
+
+# Write the ROC curve data to a text file
+roc_data = np.column_stack((fpr, tpr))
+np.savetxt('resnet50_roc_curve.txt', roc_data, delimiter=',')
+
+plt.show()
+
+# Save the training history plot as an image file
+plt.figure(figsize=(20, 8))
+plt.style.use('fivethirtyeight')
+
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, tr_loss, 'r', label='Training Loss')
+plt.plot(epochs_range, val_loss, 'g', label='Validation Loss')
+plt.scatter(index_loss + 1, val_lowest, s=150, c='blue', label=loss_label)
+plt.title('Training and Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
+plt.plot(epochs_range, val_acc, 'g', label='Validation Accuracy')
+plt.scatter(index_acc + 1, acc_highest, s=150, c='blue', label=acc_label)
+plt.title('Training and Validation Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+
+plt.tight_layout()
+plt.savefig('resnet50_training_history.png')
+
+# Write the training history data to a text file
+history_data = np.column_stack((epochs_range, tr_loss, val_loss, tr_acc, val_acc))
+np.savetxt('resnet50_training_history.txt', history_data, delimiter=',', header='Epoch,Training Loss,Validation Loss,Training Accuracy,Validation Accuracy')
 
 # Save the model architecture to JSON file
 model_json = model.to_json()
