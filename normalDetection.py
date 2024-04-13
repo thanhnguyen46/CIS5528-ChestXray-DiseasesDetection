@@ -246,7 +246,8 @@ print('-' * 20)
 print("Test Loss: ", test_score[0])
 print("Test Accuracy: ", test_score[1])
 
-preds = model.predict_generator(test_gen)
+test_gen.reset()
+preds = model.predict(test_gen, steps=len(test_gen), verbose=1)
 y_pred = np.argmax(preds, axis=1)
 
 g_dict = test_gen.class_indices
