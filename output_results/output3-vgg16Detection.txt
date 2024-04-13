@@ -1,4 +1,3 @@
-modules loaded (12 epochs)
 Found 5876 validated image filenames belonging to 2 classes.
 Found 966 validated image filenames belonging to 2 classes.
 Found 624 validated image filenames belonging to 2 classes.

@@ -67,5 +67,3 @@ Test Accuracy:  0.7756410241127014
     accuracy                           0.78       624
    macro avg       0.86      0.70      0.71       624
 weighted avg       0.83      0.78      0.75       624
-
-  ~/Doc/C/CIS5528-ChestXray-DiseasesDetection   main ?1 ❯                                      32m 27s  02:12:28 PM
