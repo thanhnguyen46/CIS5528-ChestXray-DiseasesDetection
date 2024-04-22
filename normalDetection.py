@@ -16,10 +16,9 @@ from sklearn.metrics import confusion_matrix, classification_report
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import Adam, Adamax
+from tensorflow.keras.optimizers import Adamax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, GlobalAveragePooling2D, Dense, Activation, Dropout, BatchNormalization
-from tensorflow.keras import regularizers
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -138,7 +137,6 @@ for i in range(16):
     plt.title(class_name, color= 'blue', fontsize= 12)
     plt.axis('off')
 plt.tight_layout()
-plt.show()
 
 # MODEL STRUCTURE
 
@@ -187,49 +185,52 @@ model.summary()
 
 # TRAINING THE DATA
 
+# Train the model
 epochs = 12   # number of all epochs in training
 history = model.fit(train_gen, epochs= epochs, verbose= 1, validation_data= valid_gen, shuffle= False)
 
-tr_acc = history.history['accuracy']
-tr_loss = history.history['loss']
-val_acc = history.history['val_accuracy']
-val_loss = history.history['val_loss']
-index_loss = np.argmin(val_loss)
-val_lowest = val_loss[index_loss]
-index_acc = np.argmax(val_acc)
-acc_highest = val_acc[index_acc]
+# Print model summary
+model.summary()
 
-Epochs = [i+1 for i in range(len(tr_acc))]
-loss_label = f'best epoch= {str(index_loss + 1)}'
-acc_label = f'best epoch= {str(index_acc + 1)}'
+# Get training and validation loss and accuracy
+tr_loss = history.history['loss']
+val_loss = history.history['val_loss']
+tr_acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+# Find the epoch with the lowest validation loss
+index_loss = val_loss.index(min(val_loss))
+val_lowest = val_loss[index_loss]
+loss_label = f'Lowest Validation Loss: {val_lowest:.4f} at Epoch {index_loss+1}'
+
+# Find the epoch with the highest validation accuracy
+index_acc = val_acc.index(max(val_acc))
+acc_highest = val_acc[index_acc]
+acc_label = f'Highest Validation Accuracy: {acc_highest:.4f} at Epoch {index_acc+1}'
 
 # Create a range of epochs for plotting
-epochs_range = range(1, len(tr_loss) + 1)
+epochs_range = range(1, epochs+1)
 
-# Plot training history
-plt.figure(figsize= (20, 8))
-plt.style.use('fivethirtyeight')
-
-plt.subplot(1, 2, 1)
-plt.plot(Epochs, tr_loss, 'r', label= 'Training loss')
-plt.plot(Epochs, val_loss, 'g', label= 'Validation loss')
-plt.scatter(index_loss + 1, val_lowest, s= 150, c= 'blue', label= loss_label)
+# Save the training history plot as an image file
+plt.figure(figsize=(10, 6))
+plt.plot(epochs_range, tr_loss, 'r', label='Training Loss')
+plt.plot(epochs_range, val_loss, 'g', label='Validation Loss')
+plt.scatter(index_loss + 1, val_lowest, s=150, c='blue', label=loss_label)
 plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
+plt.savefig('output_results/imbalanced/custom_train_val_loss(IB).png')
 
-plt.subplot(1, 2, 2)
-plt.plot(Epochs, tr_acc, 'r', label= 'Training Accuracy')
-plt.plot(Epochs, val_acc, 'g', label= 'Validation Accuracy')
-plt.scatter(index_acc + 1 , acc_highest, s= 150, c= 'blue', label= acc_label)
+plt.figure(figsize=(10, 6))
+plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
+plt.plot(epochs_range, val_acc, 'g', label='Validation Accuracy')
+plt.scatter(index_acc + 1, acc_highest, s=150, c='blue', label=acc_label)
 plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-
-plt.tight_layout
-plt.show()
+plt.savefig('output_results/imbalanced/custom_train_val_accuracy(IB).png')
 
 # EVALUATING THE MODEL
 
@@ -253,33 +254,6 @@ y_pred = np.argmax(preds, axis=1)
 g_dict = test_gen.class_indices
 classes = list(g_dict.keys())
 
-""" # Confusion matrix
-cm = confusion_matrix(test_gen.classes, y_pred)
-cm
-
-plt.figure(figsize= (10, 10))
-plt.imshow(cm, interpolation= 'nearest', cmap= plt.cm.Blues)
-plt.title('Confusion Matrix')
-plt.colorbar()
-
-tick_marks = np.arange(len(classes))
-plt.xticks(tick_marks, classes, rotation= 45)
-plt.yticks(tick_marks, classes)
-
-thresh = cm.max() / 2.
-for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-    plt.text(j, i, cm[i, j], horizontalalignment= 'center', color= 'white' if cm[i, j] > thresh else 'black')
-
-plt.tight_layout()
-plt.ylabel('True Label')
-plt.xlabel('Predicted Label')
-plt.show()
-
-print(classification_report(test_gen.classes, y_pred, target_names= classes))
-
-# Loading pre-trained model
-model.save('Pneumonia_NormalDetection.h5') """
-
 # Confusion matrix
 cm = confusion_matrix(test_gen.classes, y_pred)
 cm
@@ -302,14 +276,17 @@ plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 
 # Save the confusion matrix plot as an image file
-plt.savefig('normal_confusion_matrix.png')
+plt.savefig('output_results/imbalanced/custom_confusion_matrix(IB).png')
 
-# Write the confusion matrix data to a text file
-np.savetxt('normal_confusion_matrix.txt', cm, delimiter=',')
+class_report = classification_report(test_gen.classes, y_pred, target_names=classes)
+print(class_report)
 
-plt.show()
-
-print(classification_report(test_gen.classes, y_pred, target_names=classes))
+# Save classification report as a figure
+plt.figure(figsize=(10, 6))
+plt.text(0.1, 0.5, class_report, fontsize=12, ha='left', va='center')
+plt.axis('off')
+plt.tight_layout()
+plt.savefig('output_results/imbalanced/custom_classification_report(IB).png')
 
 # ROC curve
 from sklearn.metrics import roc_curve, auc
@@ -332,49 +309,4 @@ plt.title('Receiver Operating Characteristic')
 plt.legend(loc="lower right")
 
 # Save the ROC curve plot as an image file
-plt.savefig('normal_roc_curve.png')
-
-# Write the ROC curve data to a text file
-roc_data = np.column_stack((fpr, tpr))
-np.savetxt('normal_roc_curve.txt', roc_data, delimiter=',')
-
-plt.show()
-
-# Save the training history plot as an image file
-plt.figure(figsize=(20, 8))
-plt.style.use('fivethirtyeight')
-
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, tr_loss, 'r', label='Training Loss')
-plt.plot(epochs_range, val_loss, 'g', label='Validation Loss')
-plt.scatter(index_loss + 1, val_lowest, s=150, c='blue', label=loss_label)
-plt.title('Training and Validation Loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
-plt.plot(epochs_range, val_acc, 'g', label='Validation Accuracy')
-plt.scatter(index_acc + 1, acc_highest, s=150, c='blue', label=acc_label)
-plt.title('Training and Validation Accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Accuracy')
-plt.legend()
-
-plt.tight_layout()
-plt.savefig('normal_training_history.png')
-
-# Write the training history data to a text file
-history_data = np.column_stack((epochs_range, tr_loss, val_loss, tr_acc, val_acc))
-np.savetxt('normal_training_history.txt', history_data, delimiter=',', header='Epoch,Training Loss,Validation Loss,Training Accuracy,Validation Accuracy')
-
-# Save the model architecture to JSON file
-model_json = model.to_json()
-with open('Pneumonia_NormalDetection.json', 'w') as json_file:
-    json_file.write(model_json)
-    print('Model saved to disk')
-
-# Save the model weights
-model.save_weights('Pneumonia_NormalDetection.weights.h5')
-print('Weights saved to disk')
+plt.savefig('output_results/imbalanced/custom_roc_curve(IB).png')
