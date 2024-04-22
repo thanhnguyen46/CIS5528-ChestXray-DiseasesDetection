@@ -161,7 +161,6 @@ for i in range(16):
     plt.title(class_name, color= 'blue', fontsize= 12)
     plt.axis('off')
 plt.tight_layout()
-plt.show()
 
 # MODEL STRUCTURE
 
@@ -195,30 +194,34 @@ model.summary()
 
 # TRAINING THE DATA
 
+# Train the model
 epochs = 12   # number of all epochs in training
 history = model.fit(train_gen, epochs= epochs, verbose= 1, validation_data= valid_gen, shuffle= False)
 
-tr_acc = history.history['accuracy']
-tr_loss = history.history['loss']
-val_acc = history.history['val_accuracy']
-val_loss = history.history['val_loss']
-index_loss = np.argmin(val_loss)
-val_lowest = val_loss[index_loss]
-index_acc = np.argmax(val_acc)
-acc_highest = val_acc[index_acc]
+# Print model summary
+model.summary()
 
-Epochs = [i+1 for i in range(len(tr_acc))]
-loss_label = f'best epoch= {str(index_loss + 1)}'
-acc_label = f'best epoch= {str(index_acc + 1)}'
+# Get training and validation loss and accuracy
+tr_loss = history.history['loss']
+val_loss = history.history['val_loss']
+tr_acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+# Find the epoch with the lowest validation loss
+index_loss = val_loss.index(min(val_loss))
+val_lowest = val_loss[index_loss]
+loss_label = f'Lowest Validation Loss: {val_lowest:.4f} at Epoch {index_loss+1}'
+
+# Find the epoch with the highest validation accuracy
+index_acc = val_acc.index(max(val_acc))
+acc_highest = val_acc[index_acc]
+acc_label = f'Highest Validation Accuracy: {acc_highest:.4f} at Epoch {index_acc+1}'
 
 # Create a range of epochs for plotting
-epochs_range = range(1, len(tr_loss) + 1)
+epochs_range = range(1, epochs+1)
 
-# Plot training history
-plt.figure(figsize=(20, 8))
-plt.style.use('fivethirtyeight')
-
-plt.subplot(1, 2, 1)
+# Save the training history plot as an image file
+plt.figure(figsize=(10, 6))
 plt.plot(epochs_range, tr_loss, 'r', label='Training Loss')
 plt.plot(epochs_range, val_loss, 'g', label='Validation Loss')
 plt.scatter(index_loss + 1, val_lowest, s=150, c='blue', label=loss_label)
@@ -226,8 +229,9 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
+plt.savefig('output_results/balanced/vgg16_train_val_loss(B).png')
 
-plt.subplot(1, 2, 2)
+plt.figure(figsize=(10, 6))
 plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
 plt.plot(epochs_range, val_acc, 'g', label='Validation Accuracy')
 plt.scatter(index_acc + 1, acc_highest, s=150, c='blue', label=acc_label)
@@ -235,9 +239,7 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-
-plt.tight_layout()
-plt.show()
+plt.savefig('output_results/balanced/vgg16_train_val_accuracy(B).png')
 
 # EVALUATING THE MODEL
 
@@ -283,14 +285,17 @@ plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 
 # Save the confusion matrix plot as an image file
-plt.savefig('vgg16_confusion_matrix.png')
+plt.savefig('output_results/balanced/vgg16_confusion_matrix(B).png')
 
-# Write the confusion matrix data to a text file
-np.savetxt('vgg16_confusion_matrix.txt', cm, delimiter=',')
+class_report = classification_report(test_gen.classes, y_pred, target_names=classes)
+print(class_report)
 
-plt.show()
-
-print(classification_report(test_gen.classes, y_pred, target_names=classes))
+# Save classification report as a figure
+plt.figure(figsize=(10, 6))
+plt.text(0.1, 0.5, class_report, fontsize=12, ha='left', va='center')
+plt.axis('off')
+plt.tight_layout()
+plt.savefig('output_results/balanced/vgg16_classification_report(B).png')
 
 # ROC curve
 from sklearn.metrics import roc_curve, auc
@@ -313,49 +318,14 @@ plt.title('Receiver Operating Characteristic')
 plt.legend(loc="lower right")
 
 # Save the ROC curve plot as an image file
-plt.savefig('vgg16_roc_curve.png')
-
-# Write the ROC curve data to a text file
-roc_data = np.column_stack((fpr, tpr))
-np.savetxt('vgg16_roc_curve.txt', roc_data, delimiter=',')
-
-plt.show()
-
-# Save the training history plot as an image file
-plt.figure(figsize=(20, 8))
-plt.style.use('fivethirtyeight')
-
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, tr_loss, 'r', label='Training Loss')
-plt.plot(epochs_range, val_loss, 'g', label='Validation Loss')
-plt.scatter(index_loss + 1, val_lowest, s=150, c='blue', label=loss_label)
-plt.title('Training and Validation Loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
-plt.plot(epochs_range, val_acc, 'g', label='Validation Accuracy')
-plt.scatter(index_acc + 1, acc_highest, s=150, c='blue', label=acc_label)
-plt.title('Training and Validation Accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Accuracy')
-plt.legend()
-
-plt.tight_layout()
-plt.savefig('vgg16_training_history.png')
-
-# Write the training history data to a text file
-history_data = np.column_stack((epochs_range, tr_loss, val_loss, tr_acc, val_acc))
-np.savetxt('vgg16_training_history.txt', history_data, delimiter=',', header='Epoch,Training Loss,Validation Loss,Training Accuracy,Validation Accuracy')
+plt.savefig('output_results/balanced/vgg16_roc_curve(B).png')
 
 # Save the model architecture to JSON file
 model_json = model.to_json()
-with open('Pneumonia_VGG16.json', 'w') as json_file:
+with open('Pneumonia_VGG16(B).json', 'w') as json_file:
     json_file.write(model_json)
     print('Model saved to disk')
 
 # Save the model weights
-model.save_weights('Pneumonia_VGG16.weights.h5')
+model.save_weights('Pneumonia_VGG16(B).weights.h5')
 print('Weights saved to disk')
