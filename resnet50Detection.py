@@ -293,12 +293,13 @@ plt.legend(loc="lower right")
 # Save the ROC curve plot as an image file
 plt.savefig('/output_results/balanced/resnet50_roc_curve(B).png')
 
+""" 
 # Save the model architecture to JSON file
 model_json = model.to_json()
-with open('/output_results/balanced/Pneumonia_ResNet50.json', 'w') as json_file:
+with open('/output_results/balanced/Pneumonia_ResNet50(B).json', 'w') as json_file:
     json_file.write(model_json)
     print('Model saved to disk')
 
 # Save the model weights
-model.save_weights('/output_results/balanced/Pneumonia_ResNet50.weights.h5')
-print('Weights saved to disk')
+model.save_weights('/output_results/balanced/Pneumonia_ResNet50(B).weights.h5')
+print('Weights saved to disk') """
