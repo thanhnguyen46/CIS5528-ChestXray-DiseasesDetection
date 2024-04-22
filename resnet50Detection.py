@@ -202,7 +202,7 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig('resnet50_train_val_loss(B).png')
+plt.savefig('/output_results/balanced/resnet50_train_val_loss(B).png')
 
 plt.figure(figsize=(10, 6))
 plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
@@ -212,7 +212,7 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-plt.savefig('resnet50_train_val_accuracy(B).png')
+plt.savefig('/output_results/balanced/resnet50_train_val_accuracy(B).png')
 
 # EVALUATING THE MODEL
 
@@ -258,7 +258,7 @@ plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 
 # Save the confusion matrix plot as an image file
-plt.savefig('resnet50_confusion_matrix(B).png')
+plt.savefig('/output_results/balanced/resnet50_confusion_matrix(B).png')
 
 class_report = classification_report(test_gen.classes, y_pred, target_names=classes)
 print(class_report)
@@ -268,7 +268,7 @@ plt.figure(figsize=(10, 6))
 plt.text(0.1, 0.5, class_report, fontsize=12, ha='left', va='center')
 plt.axis('off')
 plt.tight_layout()
-plt.savefig('resnet50_classification_report(B).png')
+plt.savefig('/output_results/balanced/resnet50_classification_report(B).png')
 
 # ROC curve
 from sklearn.metrics import roc_curve, auc
@@ -291,14 +291,14 @@ plt.title('Receiver Operating Characteristic')
 plt.legend(loc="lower right")
 
 # Save the ROC curve plot as an image file
-plt.savefig('resnet50_roc_curve(B).png')
+plt.savefig('/output_results/balanced/resnet50_roc_curve(B).png')
 
 # Save the model architecture to JSON file
 model_json = model.to_json()
-with open('Pneumonia_ResNet50.json', 'w') as json_file:
+with open('/output_results/balanced/Pneumonia_ResNet50.json', 'w') as json_file:
     json_file.write(model_json)
     print('Model saved to disk')
 
 # Save the model weights
-model.save_weights('Pneumonia_ResNet50.weights.h5')
+model.save_weights('/output_results/balanced/Pneumonia_ResNet50.weights.h5')
 print('Weights saved to disk')
