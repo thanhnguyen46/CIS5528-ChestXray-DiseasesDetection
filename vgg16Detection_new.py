@@ -241,7 +241,7 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig('output_results/balanced/vgg16_train_val_loss(B)1.png')
+plt.savefig('output_results/balanced/vgg16_train_val_loss(B)NEW1.png')
 
 plt.figure(figsize=(10, 6))
 plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
@@ -251,7 +251,7 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-plt.savefig('output_results/balanced/vgg16_train_val_accuracy(B)1.png')
+plt.savefig('output_results/balanced/vgg16_train_val_accuracy(B)NEW1.png')
 
 # EVALUATING THE MODEL
 
@@ -297,7 +297,7 @@ plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 
 # Save the confusion matrix plot as an image file
-plt.savefig('output_results/balanced/vgg16_confusion_matrix(B)1.png')
+plt.savefig('output_results/balanced/vgg16_confusion_matrix(B)NEW1.png')
 
 class_report = classification_report(test_gen.classes, y_pred, target_names=classes)
 print(class_report)
@@ -307,7 +307,7 @@ plt.figure(figsize=(10, 6))
 plt.text(0.1, 0.5, class_report, fontsize=12, ha='left', va='center')
 plt.axis('off')
 plt.tight_layout()
-plt.savefig('output_results/balanced/vgg16_classification_report(B)1.png')
+plt.savefig('output_results/balanced/vgg16_classification_report(B)NEW1.png')
 
 # ROC curve
 from sklearn.metrics import roc_curve, auc
@@ -330,14 +330,14 @@ plt.title('Receiver Operating Characteristic')
 plt.legend(loc="lower right")
 
 # Save the ROC curve plot as an image file
-plt.savefig('output_results/balanced/vgg16_roc_curve(B)1.png')
+plt.savefig('output_results/balanced/vgg16_roc_curve(B)NEW1.png')
 
 # Save the model architecture to JSON file
 model_json = model.to_json()
-with open('Pneumonia_VGG16-1.json', 'w') as json_file:
+with open('Pneumonia_VGG16-NEW1.json', 'w') as json_file:
     json_file.write(model_json)
     print('Model saved to disk')
 
 # Save the model weights
-model.save_weights('Pneumonia_VGG16-1.weights.h5')
+model.save_weights('Pneumonia_VGG16-NEW1.weights.h5')
 print('Weights saved to disk')
