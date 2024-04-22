@@ -29,7 +29,7 @@ print ('modules loaded')
 
 # TRAINING DATA
 # Generate data paths with labels
-train_data_dir = './chest_xray/train'
+train_data_dir = './chest_xray_balanced/train'
 filepaths = []
 labels = []
 
@@ -54,7 +54,7 @@ train_df
 
 # TESTING DATA
 # Generate data paths with labels
-test_data_dir = './chest_xray/test'
+test_data_dir = './chest_xray_balanced/test'
 filepaths = []
 labels = []
 
@@ -75,7 +75,7 @@ test_df = pd.concat([Fseries, Lseries], axis= 1)
 
 # VALIDATION DATA
 # Generate data paths with labels
-val_data_dir = './chest_xray/val'
+val_data_dir = './chest_xray_balanced/val'
 filepaths = []
 labels = []
 
@@ -220,7 +220,7 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
-plt.savefig('output_results/imbalanced/custom_train_val_loss(IB).png')
+plt.savefig('output_results/balanced/custom_train_val_loss(B).png')
 
 plt.figure(figsize=(10, 6))
 plt.plot(epochs_range, tr_acc, 'r', label='Training Accuracy')
@@ -230,7 +230,7 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
-plt.savefig('output_results/imbalanced/custom_train_val_accuracy(IB).png')
+plt.savefig('output_results/balanced/custom_train_val_accuracy(B).png')
 
 # EVALUATING THE MODEL
 
@@ -276,7 +276,7 @@ plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 
 # Save the confusion matrix plot as an image file
-plt.savefig('output_results/imbalanced/custom_confusion_matrix(IB).png')
+plt.savefig('output_results/balanced/custom_confusion_matrix(B).png')
 
 class_report = classification_report(test_gen.classes, y_pred, target_names=classes)
 print(class_report)
@@ -286,7 +286,7 @@ plt.figure(figsize=(10, 6))
 plt.text(0.1, 0.5, class_report, fontsize=12, ha='left', va='center')
 plt.axis('off')
 plt.tight_layout()
-plt.savefig('output_results/imbalanced/custom_classification_report(IB).png')
+plt.savefig('output_results/balanced/custom_classification_report(B).png')
 
 # ROC curve
 from sklearn.metrics import roc_curve, auc
@@ -309,4 +309,4 @@ plt.title('Receiver Operating Characteristic')
 plt.legend(loc="lower right")
 
 # Save the ROC curve plot as an image file
-plt.savefig('output_results/imbalanced/custom_roc_curve(IB).png')
+plt.savefig('output_results/balanced/custom_roc_curve(B).png')
