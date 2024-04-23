@@ -15,13 +15,11 @@ from sklearn.metrics import confusion_matrix, classification_report
 # import Deep learning Libraries
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adamax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, GlobalAveragePooling2D, Dense, Activation, Dropout, BatchNormalization
-from tensorflow.keras import regularizers
+from tensorflow.keras.layers import Flatten, Dense, Dropout, BatchNormalization
 from tensorflow.keras.applications import VGG16
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
 import warnings
 warnings.filterwarnings("ignore")
