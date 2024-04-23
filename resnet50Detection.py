@@ -35,7 +35,6 @@ filepaths = []
 labels = []
 
 folds = os.listdir(train_data_dir)
-# print(folds)
 
 for fold in folds:
     foldpath = os.path.join(train_data_dir, fold)
