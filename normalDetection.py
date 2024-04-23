@@ -180,9 +180,6 @@ model = Sequential([
 
 model.compile(Adamax(learning_rate= 0.001), loss= 'categorical_crossentropy', metrics= ['accuracy'])
 
-model.summary()
-
-
 # TRAINING THE DATA
 
 # Train the model
