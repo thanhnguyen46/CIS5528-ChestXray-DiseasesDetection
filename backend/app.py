@@ -12,9 +12,9 @@ from io import BytesIO
 app = Flask(__name__)
 CORS(app)
 
-# Load the pre-trained VGG16 model without the top classification layer
-base_model = VGG16(weights='vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5', include_top=False, input_shape=(224, 224, 3))
+weights_path = '../vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
+base_model = VGG16(weights=weights_path, include_top=False, input_shape=(224, 224, 3))
 # Freeze base model layers
 base_model.trainable = False
 
@@ -31,8 +31,7 @@ predictions = Dense(2, activation='softmax')(x)
 model = Model(inputs=base_model.input, outputs=predictions)
 
 # Load the trained weights
-model.load_weights('output_results/save_weights/Pneumonia_VGG16.weights.h5')
-
+model.load_weights('Pneumonia_VGG16.weights.h5')
 
 @app.route('/predict', methods=['POST'])
 def predict():
