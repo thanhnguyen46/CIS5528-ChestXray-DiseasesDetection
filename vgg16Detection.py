@@ -318,10 +318,10 @@ plt.savefig('output_results/balanced/vgg16_roc_curve(B)1.png')
 
 # Save the model architecture to JSON file
 model_json = model.to_json()
-with open('Pneumonia_VGG16-1.json', 'w') as json_file:
+with open('Pneumonia_VGG16.json', 'w') as json_file:
     json_file.write(model_json)
     print('Model saved to disk')
 
 # Save the model weights
-model.save_weights('Pneumonia_VGG16-1.weights.h5')
+model.save_weights('Pneumonia_VGG16.weights.h5')
 print('Weights saved to disk')
